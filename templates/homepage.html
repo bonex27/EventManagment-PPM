@@ -10,8 +10,13 @@
                     <div class="card-body">
                         <h1 class="card-title text-center">Event management</h1>
                         <div class="text-center mt-4">
+                                {% if user.is_authenticated %}
+                                <a href="{% url 'event-list' %}" class="btn btn-primary me-2">View Lists</a>
+                                <a href="#" class="btn btn-primary">My Tasks</a>
+                            {% else %}
                                 <a href="{% url 'login' %}" class="btn btn-primary me-2">Log In</a>
                                 <a href="{% url 'signup' %}" class="btn btn-secondary">Sign Up</a>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
