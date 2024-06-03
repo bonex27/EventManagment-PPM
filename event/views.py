@@ -13,6 +13,7 @@ class EventListsView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context["mode"] = "avaevent"
         context["title"] = "Available Events"
         context["lists"] = Event.objects.exclude(participants=self.request.user.id)
         context["message"] = "hello"
@@ -25,7 +26,7 @@ class EventListsSubscribedView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
+        context["mode"] = "subevent"
         context["title"] = "Subscribed Events"
         context["lists"] = Event.objects.filter(participants=self.request.user.id)
         context["message"] = "hello"
@@ -38,6 +39,7 @@ class EventListsOrganizedView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context["mode"] = "myevent"
         context["title"] = "My Events"
         context["lists"] = Event.objects.filter(owner=self.request.user.id)
         context["message"] = "hello"
@@ -66,6 +68,20 @@ class CreateEventView(LoginRequiredMixin, CreateView):
             return self.form_invalid(form)
 
 
+class EventDeleteView(LoginRequiredMixin, View):
+    model = Event
+
+    def get(self, request, *args, **kwargs):
+        # Only the task list participants can comment
+        if request.user != Event.objects.get(id=kwargs.get("pk")).owner:
+            #set_message(request, "You are not a participant of this list.")
+            return redirect("my-event-organized")
+
+        event = Event.objects.get(id=kwargs.get("pk"))
+        event.delete()
+        return redirect("my-event-organized")
+
+
 class EventSubscribeView(LoginRequiredMixin, View):
     model = Event
 
@@ -79,3 +95,20 @@ class EventSubscribeView(LoginRequiredMixin, View):
         event.participants.add(request.user)
         event.save()
         return redirect("event-list")
+
+
+class EventUnscribeView(LoginRequiredMixin, View):
+    model = Event
+
+    def get(self, request, *args, **kwargs):
+        # Only the task list participants can comment
+        if request.user in Event.objects.get(
+                id=kwargs.get("pk")).participants.all() and not request.user == Event.objects.get(
+                id=kwargs.get("pk")).owner:
+
+            event = Event.objects.get(id=kwargs.get("pk"))
+            event.participants.remove(self.request.user)
+            event.save()
+            return redirect("my-event-subscribe")
+        else:
+            return redirect("my-event-subscribe")

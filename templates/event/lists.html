@@ -4,9 +4,11 @@
     <div class="row d-flex align-items-end">
         <h3 class="col m-0">{{ title }}</h3>
         <!-- New list -->
+        {% if mode == "myevent" %}
         <div class="col"><a href="{% url "event_new" %}">
             <button class="btn btn-primary float-end">New event</button>
         </a></div>
+        {% endif %}
     </div>
 
     <ul class="p-0 my-3">
@@ -25,19 +27,31 @@
                     </div>
                     <div class="card-body">
                         <h6 class="card-text mb-2">{{ event_list.description }}</h6>
-                        <div class="mb-2">Participants:
-                            {% for user in event_list.participants.all %}
-                                <h5 class="d-inline-block my-0 me-1"><span
-                                        class="badge rounded-pill bg-info">{{ user }}</span>
-                                </h5>
-                            {% endfor %}
+                        <div class="mb-2">Date: {{ event_list.date}}
                         </div>
-                        <p class="mb-0">Attendance: {#  { event_list.tasks.count }}#}</p>
+{#                        <div class="mb-2">Participants:#}
+{#                            {% for user in event_list.participants.all %}#}
+{#                                <h5 class="d-inline-block my-0 me-1"><span#}
+{#                                        class="badge rounded-pill bg-info">{{ user }}</span>#}
+{#                                </h5>#}
+{#                            {% endfor %}#}
+{#                        </div>#}
+                        <p class="mb-0">Attendance: {{ event_list.participants.all.count }}</p>
                     </div>
                     <div class="card-footer text-end text-muted">
+                        {% if mode == "avaevent" %}
                         <a href="{% url "event-subscribe" event_list.id %}" class="d-inline-flex link-dark text-decoration-none">
                             <button class="btn text-danger">Subscribe</button>
                         </a>
+                        {% elif mode == "myevent" %}
+                        <a href="{% url "event-delete" event_list.id %}" class="d-inline-flex link-dark text-decoration-none">
+                            <button class="btn text-danger">Delete event</button>
+                        </a>
+                        {% elif mode == "subevent" %}
+                        <a href="{% url "event-unsubscribe" event_list.id %}" class="d-inline-flex link-dark text-decoration-none">
+                            <button class="btn text-danger">Unsubscribe</button>
+                        </a>
+                        {% endif %}
                     </div>
                 </div>
             </a>
