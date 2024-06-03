@@ -1,1 +1,1 @@
-web: python manage.py makemigrations && python manage.py migrate && gunicorn <project_name>.wsg
+web: python manage.py makemigrations && pythonz manage.py migrate && gunicorn EventManagment.wsg
