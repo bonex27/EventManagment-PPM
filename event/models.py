@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 class Event(models.Model):
     name = models.CharField(max_length=100)
     date = models.DateField()
-    time = models.TimeField()
+    time = models.TimeField(null=True, blank=True)
     description = models.TextField()
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="owner")
     participants = models.ManyToManyField(User, related_name="participants")

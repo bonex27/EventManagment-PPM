@@ -32,7 +32,7 @@
             {% if user.is_authenticated %}
                 <ul class="nav col-lg-auto me-lg-auto justify-content-center mb-md-0 d-none d-sm-flex">
                     <li class="nav-item">
-                        <a href="#" class="nav-link px-2 py-0 link-dark">Lists</a>
+                        <a href="{% url 'event-list' %}" class="nav-link px-2 py-0 link-dark">Lists</a>
                     </li>
                     <li class="nav-item">
                         <a href="#" class="nav-link px-2 py-0 link-dark">My tasks</a>
@@ -44,7 +44,7 @@
                         {{ user.username }}
                     </a>
                     <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser">
-                        <li><a class="dropdown-item" href="#">Lists</a></li>
+                        <li><a class="dropdown-item" href="{% url 'event-list' %}">Event</a></li>
                         <li><a class="dropdown-item" href="{#  #}">My tasks</a></li>
                         <li>
                             <hr class="dropdown-divider">

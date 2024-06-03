@@ -11,8 +11,9 @@
                         <h1 class="card-title text-center">Event management</h1>
                         <div class="text-center mt-4">
                                 {% if user.is_authenticated %}
-                                <a href="{% url 'event-list' %}" class="btn btn-primary me-2">View Lists</a>
-                                <a href="#" class="btn btn-primary">My Tasks</a>
+                                <a href="{% url 'event-list' %}" class="btn btn-primary me-2">Available events</a>
+                                <a href="{% url 'my-event-organized' %}" class="btn btn-danger me-2">My Event</a>
+                                <a href="{% url "my-event-subscribe" %}" class="btn btn-success me-2">Subscribed events</a>
                             {% else %}
                                 <a href="{% url 'login' %}" class="btn btn-primary me-2">Log In</a>
                                 <a href="{% url 'signup' %}" class="btn btn-secondary">Sign Up</a>

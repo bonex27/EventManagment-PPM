@@ -23,4 +23,9 @@ from . import views
 urlpatterns = [
 #list event
     path('', views.EventListsView.as_view(), name='event-list'),
+    path('event-subscribe-list', views.EventListsOrganizedView.as_view(), name='my-event-organized'),
+    path('event-organized-list', views.EventListsSubscribedView.as_view(), name='my-event-subscribe'),
+
+    path('event-subscribe/<int:pk>', views.EventSubscribeView.as_view(), name='event-subscribe'),
+    path('new', views.CreateEventView.as_view(), name="event_new"),
 ]

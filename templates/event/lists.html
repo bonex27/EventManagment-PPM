@@ -2,12 +2,52 @@
 
 {% block content %}
     <div class="row d-flex align-items-end">
-        <h3 class="col m-0">Task lists</h3>
+        <h3 class="col m-0">{{ title }}</h3>
         <!-- New list -->
-        <div class="col"><a href="#">
+        <div class="col"><a href="{% url "event_new" %}">
             <button class="btn btn-primary float-end">New event</button>
         </a></div>
     </div>
 
-
+    <ul class="p-0 my-3">
+        {% for event_list in lists %}
+            <a href="#" class="link-dark text-decoration-none">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="row d-flex">
+                            <div class="col">
+                                <span class="fw-bold">{{ event_list.name }}</span>
+                            </div>
+                            <div class="col">
+                                <em class="text-muted float-end">Organnized by <b>{{ event_list.owner }}</b></em>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h6 class="card-text mb-2">{{ event_list.description }}</h6>
+                        <div class="mb-2">Participants:
+                            {% for user in event_list.participants.all %}
+                                <h5 class="d-inline-block my-0 me-1"><span
+                                        class="badge rounded-pill bg-info">{{ user }}</span>
+                                </h5>
+                            {% endfor %}
+                        </div>
+                        <p class="mb-0">Attendance: {#  { event_list.tasks.count }}#}</p>
+                    </div>
+                    <div class="card-footer text-end text-muted">
+                        <a href="{% url "event-subscribe" event_list.id %}" class="d-inline-flex link-dark text-decoration-none">
+                            <button class="btn text-danger">Subscribe</button>
+                        </a>
+                    </div>
+                </div>
+            </a>
+            <br/>
+        {% empty %}
+            <ul class="list-group my-2">
+                <li class="list-group-item list-group-item-primary">
+                    <h4 class="mb-0">No event found.</h4>
+                </li>
+            </ul>
+        {% endfor %}
+    </ul>
 {% endblock %}
