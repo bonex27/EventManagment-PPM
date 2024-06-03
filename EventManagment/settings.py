@@ -127,9 +127,10 @@ CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 #Database
-db_from_env = dj_database_url.config(conn_max_age=500, conn_health_checks=True, )
-print(db_from_env)
-DATABASES['default'].update(db_from_env)
+if os.name != 'posix':
+    db_from_env = dj_database_url.config(conn_max_age=500, conn_health_checks=True, )
+    print(db_from_env)
+    DATABASES['default'].update(db_from_env)
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
