@@ -23,12 +23,12 @@ from . import views
 urlpatterns = [
 #list event
     path('', views.EventListsView.as_view(), name='event-list'),
-    path('event-subscribe-list', views.EventListsOrganizedView.as_view(), name='my-event-organized'),
-    path('event-organized-list', views.EventListsSubscribedView.as_view(), name='my-event-subscribe'),
+    path('event-organized-list', views.EventListsOrganizedView.as_view(), name='my-event-organized'),
+    path('event-subscribe-list', views.EventListsSubscribedView.as_view(), name='my-event-subscribe'),
 
     path('event-subscribe/<int:pk>', views.EventSubscribeView.as_view(), name='event-subscribe'),
     path('event-unsubscribe/<int:pk>', views.EventUnscribeView.as_view(), name='event-unsubscribe'),
-
+    path('event-organized-list/<int:pk>/edit', views.EditEventView.as_view(), name="event_edit"),
     path('event-delete/<int:pk>', views.EventDeleteView.as_view(), name='event-delete'),
 
     path('new', views.CreateEventView.as_view(), name="event_new"),

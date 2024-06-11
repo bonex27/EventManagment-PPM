@@ -2,7 +2,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import ListView, CreateView
+from django.views.generic import ListView, CreateView, UpdateView
 from event.models import Event
 
 
@@ -68,6 +68,25 @@ class CreateEventView(LoginRequiredMixin, CreateView):
             return self.form_invalid(form)
 
 
+class EditEventView(LoginRequiredMixin, UpdateView):
+    model = Event
+    fields = ["name", "date", "description"]
+    template_name = "event/edit_event.html"
+    success_url = reverse_lazy("my-event-organized")
+
+    def get(self, request, *args, **kwargs):
+        event = Event.objects.get(pk=self.kwargs["pk"])
+        if event.owner != self.request.user:
+            return redirect("")
+        return super().get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        event = Event.objects.get(pk=self.kwargs["pk"])
+        if event.owner != self.request.user:
+            return redirect("")
+        return super().post(request, *args, **kwargs)
+
+
 class EventDeleteView(LoginRequiredMixin, View):
     model = Event
 
@@ -104,7 +123,7 @@ class EventUnscribeView(LoginRequiredMixin, View):
         # Only the task list participants can comment
         if request.user in Event.objects.get(
                 id=kwargs.get("pk")).participants.all() and not request.user == Event.objects.get(
-                id=kwargs.get("pk")).owner:
+            id=kwargs.get("pk")).owner:
 
             event = Event.objects.get(id=kwargs.get("pk"))
             event.participants.remove(self.request.user)

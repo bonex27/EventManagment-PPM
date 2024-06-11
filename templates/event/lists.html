@@ -13,7 +13,7 @@
 
     <ul class="p-0 my-3">
         {% for event_list in lists %}
-            <a href="#" class="link-dark text-decoration-none">
+            <a href="{% url 'event_edit' event_list.id  %}" class="link-dark text-decoration-none">
                 <div class="card">
                     <div class="card-header">
                         <div class="row d-flex">
@@ -21,7 +21,7 @@
                                 <span class="fw-bold">{{ event_list.name }}</span>
                             </div>
                             <div class="col">
-                                <em class="text-muted float-end">Organnized by <b>{{ event_list.owner }}</b></em>
+                                <em class="text-muted float-end">Organized by <b>{{ event_list.owner }}</b></em>
                             </div>
                         </div>
                     </div>
