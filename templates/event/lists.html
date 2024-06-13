@@ -13,7 +13,7 @@
 
     <ul class="p-0 my-3">
         {% for event_list in lists %}
-            <a href="{% url 'event_edit' event_list.id  %}" class="link-dark text-decoration-none">
+            <a  class="link-dark text-decoration-none">
                 <div class="card">
                     <div class="card-header">
                         <div class="row d-flex">
@@ -44,6 +44,9 @@
                             <button class="btn text-danger">Subscribe</button>
                         </a>
                         {% elif mode == "myevent" %}
+                             <a href="{% url 'event_edit' event_list.id  %}" class="d-inline-flex link-dark text-decoration-none">
+                            <button class="btn text-primary">Edit event</button>
+                        </a>
                         <a href="{% url "event-delete" event_list.id %}" class="d-inline-flex link-dark text-decoration-none">
                             <button class="btn text-danger">Delete event</button>
                         </a>
