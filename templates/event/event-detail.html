@@ -1,10 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
 
-</body>
-</html>
+{% block title %}{{ event.name }}{% endblock title %}
+
+{% block content %}
+    <div class="container">
+        <div class="row my-3">
+            <div class="col-md-8 offset-md-2">
+                <h2>{{ event.name }}</h2>
+                <p class="mb-2">Date <span class="fw-bold">{{ event.date }}</span></p>
+                <p class="mb-2">Description <span class="fw-bold">{{ event.description }}</span></p>
+                </p>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

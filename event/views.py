@@ -1,8 +1,10 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import ListView, CreateView, UpdateView
+from django.views.generic import ListView, CreateView, UpdateView, DetailView, FormView
+
+from event.forms import EventForm
 from event.models import Event
 
 
@@ -46,26 +48,38 @@ class EventListsOrganizedView(LoginRequiredMixin, ListView):
         return context
 
 
-class CreateEventView(LoginRequiredMixin, CreateView):
-    model = Event
-    fields = ["name", "date", "description"]
-
+class EventForms(LoginRequiredMixin, FormView):
+    form_class = EventForm
+    success_url = reverse_lazy("my-event-organized")
     template_name = "event/create_event.html"
-    success_url = reverse_lazy("lists")
 
     def post(self, request, *args, **kwargs):
         form = self.get_form()
+        event = Event()
         if form.is_valid():
-            form.instance.owner = self.request.user
+            event.owner = self.request.user
+            event.name = form.cleaned_data["name"]
+            event.description = form.cleaned_data["description"]
+            event.date = form.cleaned_data["date"]
+            event.save()
 
-            task_list = form.save()
-
-            # Add the user as owner and participant
-            task_list.participants.add(self.request.user)
-            task_list.save()
-            return redirect("event-list")
+            event.participants.add(request.user)
+            event.save()
+            return redirect("my-event-organized")
         else:
             return self.form_invalid(form)
+
+
+class EventDetailView(LoginRequiredMixin, View):
+    template = "event/event-detail.html"
+
+    def get(self, request, event_id):
+        # if request.user not in Event.objects.get(id=event_id).participants.all():
+        #     #set_message(request, "You are not a participant of this list.")
+        #     return redirect("lists")
+
+        event = Event.objects.get(id=event_id)
+        return render(request, self.template, {"event": event})
 
 
 class EditEventView(LoginRequiredMixin, UpdateView):
