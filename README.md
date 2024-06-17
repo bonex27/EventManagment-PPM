@@ -19,3 +19,8 @@ Users can only register if there are still places available, otherwise the event
 The event owner can edit or delete his events, also can get a details view of each single event with partecipants list.
 
 The event owner can remove parteciants.
+
+### Guest user
+How want test this web-abb can use guest user with this credentials:
+- username: guest
+- password: Guest@1234
