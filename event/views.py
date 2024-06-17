@@ -76,8 +76,9 @@ class EventFormsCreate(LoginRequiredMixin, FormView):
             event.name = form.cleaned_data["name"]
             event.description = form.cleaned_data["description"]
             event.date = form.cleaned_data["date"]
+            event.location = form.cleaned_data["location"]
+            event.max_participants = form.cleaned_data["max_participants"]
             event.save()
-
             event.participants.add(request.user)
             event.save()
             set_message(request, f"Created event {event.name}")
@@ -90,10 +91,6 @@ class EventDetailView(LoginRequiredMixin, View):
     template = "event/event-detail.html"
 
     def get(self, request, event_id):
-        # if request.user not in Event.objects.get(id=event_id).participants.all():
-        #     #set_message(request, "You are not a participant of this list.")
-        #     return redirect("lists")
-
         event = Event.objects.get(id=event_id)
         return render(request, self.template, {"event": event})
 
@@ -106,18 +103,6 @@ class EditEventView(LoginRequiredMixin, UpdateView):
 
     def get_success_url(self):
         return reverse_lazy('event_details', kwargs={'event_id': self.object.pk})
-    # def get(self, request, *args, **kwargs):
-    #     event = Event.objects.get(id=self.kwargs["pk"])
-    #     form = self.form_class()
-    #     self.context['form'] = form
-    #
-    #     return render(request, self.template_name, self.context)
-
-    # def get(self, request, *args, **kwargs):
-    #     event = Event.objects.get(pk=self.kwargs["pk"])
-    #     if event.owner != self.request.user:
-    #         return redirect("")
-    #     return super().get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
         event = Event.objects.get(pk=self.kwargs["pk"])
@@ -132,7 +117,6 @@ class EventDeleteView(LoginRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
         event = Event.objects.get(id=kwargs.get("pk"))
-        # Only the task list participants can comment
         if request.user != event.owner:
             set_message(request, "You aren't the owner of this event")
             return redirect("my-event-organized")
@@ -147,7 +131,6 @@ class EventSubscribeView(LoginRequiredMixin, View):
     model = Event
 
     def get(self, request, *args, **kwargs):
-        # Only the task list participants can comment
         if request.user in Event.objects.get(id=kwargs.get("pk")).participants.all():
             #set_message(request, "You are not a participant of this list.")
             return redirect("event-list")
@@ -163,7 +146,6 @@ class EventUnscribeView(LoginRequiredMixin, View):
     model = Event
 
     def get(self, request, *args, **kwargs):
-        # Only the task list participants can comment
         if request.user in Event.objects.get(
                 id=kwargs.get("pk")).participants.all() and not request.user == Event.objects.get(
             id=kwargs.get("pk")).owner:
@@ -183,7 +165,6 @@ class EventRemoveUserView(LoginRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
         user = User.objects.get(pk=kwargs.get("user"))
-        # Only the task list participants can comment
         if user in Event.objects.get(
                 id=kwargs.get("event")).participants.all():
             if request.user == Event.objects.get(
