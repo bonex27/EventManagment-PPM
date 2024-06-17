@@ -6,11 +6,35 @@
 {% block content %}
     <div class="container">
         <div class="row my-3">
+
             <div class="col-md-8 offset-md-2">
+
                 <h2>{{ event.name }}</h2>
                 <p class="mb-2">Date <span class="fw-bold">{{ event.date }}</span></p>
                 <p class="mb-2">Description <span class="fw-bold">{{ event.description }}</span></p>
-                </p>
+                <p class="mb-2">Date: <span class="fw-bold">{{ event.date|date:"d M Y"}}</span></p>
+                <p class="mb-2">Partecipants: <span class="fw-bold">{{ event.participants.count}}/{{ event.max_participants}}</span></p>
+                <p class="mb-2">Organized by: <span class="fw-bold">{{ event.owner}}</span></p>
+
+                <ul class="list-group">
+                <h4>Participants</h4>
+                    {% for user in event.participants.all %}
+                        <li class="list-group-item"><a href="{% url "event-unsubscribe" event.id user.id %}"><button type="button" class="btn btn-danger"><i class="bi bi-x-circle-fill"></i></button></a> {{ user.first_name  }} {{ user.last_name  }} {{ user.email  }} </li>
+                    {% empty %}
+                        <div class="alert alert-danger" role="alert">
+                          No participants
+                        </div>
+                    {% endfor %}
+
+                </ul>
+            <div class="col-md-8 m-2 d-flex justify-content-start">
+                <a href="{% url 'event_edit' event.id  %}" class="d-inline-flex link-dark text-decoration-none m-2">
+                    <button class="btn btn-warning">Edit event</button>
+                </a>
+                <a href="{% url "event-delete" event.id %}" class="d-inline-flex link-dark text-decoration-none m-2">
+                    <button class="btn btn-danger">Delete event</button>
+                </a>
+            </div>
             </div>
         </div>
     </div>

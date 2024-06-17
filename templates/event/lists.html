@@ -13,13 +13,18 @@
 
     <ul class="p-0 my-3">
         {% for event_list in lists %}
-            <a  class="link-dark text-decoration-none">
+            {% if mode == "myevent" %}
+            <a href="{%  url "event_details" event_list.id  %}"  class="link-dark text-decoration-none">
+            {% else %}
+                <a href="#"  class="link-dark text-decoration-none">
+            {% endif %}
                 <div class="card">
                     <div class="card-header">
                         <div class="row d-flex">
                             <div class="col">
                                 <span class="fw-bold">{{ event_list.name }}</span>
                             </div>
+                            
                             <div class="col">
                                 <em class="text-muted float-end">Organized by <b>{{ event_list.owner }}</b></em>
                             </div>
@@ -27,22 +32,25 @@
                     </div>
                     <div class="card-body">
                         <h6 class="card-text mb-2">{{ event_list.description }}</h6>
-                        <div class="mb-2">Date: {{ event_list.date}}
+                        <div class="mb-2">
+                            Date: {{ event_list.date|date:"d M Y"}}
                         </div>
-{#                        <div class="mb-2">Participants:#}
-{#                            {% for user in event_list.participants.all %}#}
-{#                                <h5 class="d-inline-block my-0 me-1"><span#}
-{#                                        class="badge rounded-pill bg-info">{{ user }}</span>#}
-{#                                </h5>#}
-{#                            {% endfor %}#}
-{#                        </div>#}
-                        <p class="mb-0">Attendance: {{ event_list.participants.all.count }}</p>
+
+                        <div class="mb-2">
+                            Max number of participants: {{ event_list.max_participants}}
+                        </div>
                     </div>
                     <div class="card-footer text-end text-muted">
                         {% if mode == "avaevent" %}
-                        <a href="{% url "event-subscribe" event_list.id %}" class="d-inline-flex link-dark text-decoration-none">
-                            <button class="btn text-danger">Subscribe</button>
-                        </a>
+                            {% if event_list.participants.count  < event_list.max_participants %}
+                                <a href="{% url "event-subscribe" event_list.id %}" class="d-inline-flex link-dark text-decoration-none">
+                                    <button class="btn text-success">Subscribe</button>
+                                </a>
+                            {% else %}
+                                <a href="" class="d-inline-flex link-dark text-decoration-none">
+                                    <button class="btn text-danger">Event sold out</button>
+                                </a>
+                            {% endif %}
                         {% elif mode == "myevent" %}
                              <a href="{% url 'event_edit' event_list.id  %}" class="d-inline-flex link-dark text-decoration-none">
                             <button class="btn text-primary">Edit event</button>
@@ -51,7 +59,7 @@
                             <button class="btn text-danger">Delete event</button>
                         </a>
                         {% elif mode == "subevent" %}
-                        <a href="{% url "event-unsubscribe" event_list.id %}" class="d-inline-flex link-dark text-decoration-none">
+                        <a href="{% url "event-unsubscribe" event_list.id %}"  class="d-inline-flex link-dark text-decoration-none">
                             <button class="btn text-danger">Unsubscribe</button>
                         </a>
                         {% endif %}
