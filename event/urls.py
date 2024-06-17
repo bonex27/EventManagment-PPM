@@ -29,7 +29,7 @@ urlpatterns = [
     path('event-subscribe/<int:pk>', views.EventSubscribeView.as_view(), name='event-subscribe'),
     path('event-unsubscribe/<int:pk>', views.EventUnscribeView.as_view(), name='event-unsubscribe'),
     path('event-unsubscribe/<int:event>/<int:user>', views.EventRemoveUserView.as_view(), name='event-unsubscribe'),
-    path('event/<int:event_id>/edit', views.EditEventView.as_view(), name="event_edit"),
+    path('event/<int:pk>/edit', views.EditEventView.as_view(), name="event_edit"),
     path('event-delete/<int:pk>', views.EventDeleteView.as_view(), name='event-delete'),
 
     path('new', views.EventFormsCreate.as_view(), name="event_new"),

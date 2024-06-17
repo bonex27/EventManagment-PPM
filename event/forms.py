@@ -7,20 +7,19 @@ from django import forms
 from event.models import Event
 
 
-class EventForm(forms.Form):
-
+class EventForm(forms.ModelForm):
     name = forms.CharField()
     max_participants = forms.IntegerField()
     description = forms.CharField()
     date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
     location = forms.CharField()
 
-    def __init__(self, *args, **kwargs):
-        super(EventForm, self).__init__(*args, **kwargs)
-        self.helper = FormHelper(self)
-        self.helper.form_action = 'Submit'
-        self.helper.add_input(Submit('submit', 'Submit', css_class='btn btn-primary'))
-
     class Meta:
         model = Event
-        fields = '__all__'
+        fields = ["name", "max_participants", "description", "date", "location"]
+
+    def __init__(self, *args, **kwargs):
+        super(EventForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_method = 'post'
+        self.helper.add_input(Submit('submit', 'Save'))
