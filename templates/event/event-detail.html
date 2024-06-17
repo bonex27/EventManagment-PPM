@@ -14,6 +14,7 @@
                 <p class="mb-2">Description <span class="fw-bold">{{ event.description }}</span></p>
                 <p class="mb-2">Date: <span class="fw-bold">{{ event.date|date:"d M Y"}}</span></p>
                 <p class="mb-2">Partecipants: <span class="fw-bold">{{ event.participants.count}}/{{ event.max_participants}}</span></p>
+                <p class="mb-2">Location: <span class="fw-bold">{{ event.location}}</span></p>
                 <p class="mb-2">Organized by: <span class="fw-bold">{{ event.owner}}</span></p>
 
                 <ul class="list-group">
