@@ -24,3 +24,6 @@ The event owner can remove parteciants.
 How want test this web-abb can use guest user with this credentials:
 - username: guest
 - password: Guest@1234
+
+### Localhost
+For use this web-app on local sqlite comment settings.py from line 132 to 134
